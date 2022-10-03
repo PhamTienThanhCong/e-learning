@@ -49,11 +49,6 @@
                                 @endif
                             </span>
                             <br>
-                            @for ($j = 1 ; $j <= $lessons[$i]->number_question ; $j++)
-                                <span class="icon-question">
-                                    {{ $j }}
-                                </span>
-                            @endfor
                         </li>
                     @endfor
                 </ul>

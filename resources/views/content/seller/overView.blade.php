@@ -55,42 +55,6 @@
     </div>
     {{-- Kết thúc cục tổng quan --}}
 
-    {{-- Bắt đầu biểu đồ thu nhập --}}
-    <div class="card" style="margin-bottom: 40px">
-        <div class="card-body">
-            <div class="chartjs-size-monitor">
-                <div class="chartjs-size-monitor-expand">
-                    <div class=""></div>
-                </div>
-                <div class="chartjs-size-monitor-shrink">
-                    <div class=""></div>
-                </div>
-            </div>
-            <h4 class="card-title">Tổng quan thu nhập</h4>
-            <canvas id="line-chart-seller" style="height: 407px; display: block; width: 815px;" width="815" height="407"
-                class="chartjs-render-monitor"></canvas>
-        </div>
-    </div>
-    {{-- Kết thúc biểu đồ thu nhập --}}
-
-    {{-- Bắt đầu biểu đồ thu nhập --}}
-    <div class="card" style="margin-bottom: 40px">
-        <div class="card-body">
-            <div class="chartjs-size-monitor">
-                <div class="chartjs-size-monitor-expand">
-                    <div class=""></div>
-                </div>
-                <div class="chartjs-size-monitor-shrink">
-                    <div class=""></div>
-                </div>
-            </div>
-            <h4 class="card-title">Tổng quan thu nhập</h4>
-            <canvas id="line-chart-seller-course" style="height: 407px; display: block; width: 815px;" width="815" height="407"
-                class="chartjs-render-monitor"></canvas>
-        </div>
-    </div>
-    {{-- Kết thúc biểu đồ thu nhập --}}
-
     {{-- Bắt đầu bảng khóa học --}}
     <div class="card">
         <div class="card-body">

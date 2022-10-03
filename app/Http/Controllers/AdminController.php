@@ -182,7 +182,11 @@ class AdminController extends Controller
         for ($i = 0; $i < count($my_rate); $i++) {
             $total_rate += $my_rate[$i]->rate;
         }
-        $total_rate = $total_rate/count($my_rate);
+        if (count($my_rate) > 0){
+            $total_rate = $total_rate/count($my_rate);
+        }else{
+            $total_rate = 0;
+        }
         return view('content.seller.Course.detailCourse', [
             'name_admin'    => $name_admin,
             'url'           => $part,

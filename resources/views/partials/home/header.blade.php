@@ -1,7 +1,7 @@
 <header class="header">
     <div class="header-contain">
-        <div class="header-logo">
-            <span>Vaiable</span>
+        <div class="header-logo" style="width: 180px;">
+            <span>E-learning</span>
         </div>
         <div class="header-search">
             <form class="search-input-form" action="{{ route('home.course') }}" method="get">

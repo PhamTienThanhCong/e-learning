@@ -15,8 +15,8 @@
 
 @section('content')
     <img class="main-img" width="95%" height="350px"
-        src="https://th.bing.com/th/id/R.509f2760a9955ef5d20d2c37a2e03d83?rik=0TubJc1s9uxbNA&pid=ImgRaw&r=0"
-        alt="">
+        src="http://www.stscomps.com/elearning4.jpg"
+        alt="Ảnh quảng cáo">
     <div class="grid">
         <div class="grid__row">
             @foreach ($courses as $course)

@@ -57,23 +57,6 @@
     </div>
     {{-- Kết thúc cục tổng quan --}}
 
-    {{-- Bắt đầu biểu đồ thu nhập --}}
-    <div class="card" style="margin-bottom: 40px">
-        <div class="card-body">
-            <div class="chartjs-size-monitor">
-                <div class="chartjs-size-monitor-expand">
-                    <div class=""></div>
-                </div>
-                <div class="chartjs-size-monitor-shrink">
-                    <div class=""></div>
-                </div>
-            </div>
-            <h4 class="card-title">Thu nhập chung</h4>
-            <canvas id="line-chart" style="height: 407px; display: block; width: 815px;" width="815" height="407"
-                class="chartjs-render-monitor"></canvas>
-        </div>
-    </div>
-    {{-- Kết thúc biểu đồ thu nhập --}}
 
     {{-- Bắt đầu bảng nhân viên --}}
     <div class="col-lg-12 grid-margin stretch-card">

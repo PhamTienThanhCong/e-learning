@@ -18,7 +18,7 @@ class AdminFactory extends Factory
             'name' => $this->faker->firstName() ." ". $this->faker->lastName(),
             'email' => $this->faker->email(),
             'description' => $this->faker->paragraph($nbSentences = 5, $variableNbSentences = true),
-            'password' => Hash::make('cong'),
+            'password' => Hash::make('123'),
             'token' => bin2hex(random_bytes(16)),
             'lever' => $this->faker->boolean(),
         ];
