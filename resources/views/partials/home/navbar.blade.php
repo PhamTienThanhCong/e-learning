@@ -1,12 +1,31 @@
-<div class="header-nav">
-    <ul class="nav-list">
-        <li class="nav-item" id="course"><a href="{{ route('home.course') }}"><i class=" nav-icon fa-solid fa-house-chimney"></i><br>Home</a>
-        </li>
-        {{-- <li class="nav-item" id="my-course"><a href="{{ route('home.myCourse') }}"><i class=" nav-icon fa-solid fa-book-open"></i><br>Subject</a> --}}
-        <li class="nav-item" id="my-course"><a href="#"><i class=" nav-icon fa-solid fa-book-open"></i><br>Subject</a>
-        </li>
-        <li class="nav-item" id="my-cart"><a href="#"><i class=" nav-icon fa-solid fa-cart-shopping"></i><br>Giỏ Hàng</a></li>
-        {{-- <li class="nav-item" id="my-cart"><a href="{{ route('home.myCart') }}"><i class=" nav-icon fa-solid fa-cart-shopping"></i><br>Giỏ Hàng</a></li> --}}
-        <li class="nav-item" id="my-account"><a href="{{ route('user.myAccount') }}"><i class=" nav-icon fa-solid fa-user"></i><br>Tài Khoản</a></li>
-    </ul>
-</div>
+<div class="side-bar">
+
+    <div id="close-btn">
+       <i class="fas fa-times"></i>
+    </div>
+    <div class="profile">
+        @if (Session::get('name') != null)
+            <img src="{{ asset("images/avatar/" . Session::get('image')) }}" class="image" alt="">
+            <h3 class="name">{{ Session::get('name') }}</h3>
+            <p class="role">studen</p>
+            <a href="{{ route('user.myAccount') }}" class="btn">view profile</a>
+        @else
+        <!-- Chưa đăng nhập -->
+            <img src="{{ asset("images/avatar/avatar.png") }}" class="image" alt="">
+            <h3 class="name">user</h3>
+            <p class="role">Tài khoản khách</p>
+            <a href="{{ route('user.login') }}" class="option-btn">login</a>
+        <!-- Chưa đăng nhập -->
+        @endif
+    </div>
+ 
+    <nav class="navbar">
+       <a href="{{ route('home.course') }}"><i class="fas fa-home"></i><span>home</span></a>
+       <a href="#"><i class="fas fa-question"></i><span>about</span></a>
+       <a href="{{ route('home.myCourse') }}"><i class="fas fa-graduation-cap"></i><span>my courses</span></a>
+       <a href="{{ route('home.myCart') }}"><i class="fa-solid fa-cart-shopping"></i><span>my cart</span></a>
+       <a href="#"><i class="fas fa-chalkboard-user"></i><span>teachers</span></a>
+       <a href="#"><i class="fas fa-headset"></i><span>contact us</span></a>
+    </nav>
+ 
+ </div>
