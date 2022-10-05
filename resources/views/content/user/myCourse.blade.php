@@ -17,7 +17,7 @@
 @section('content')
     <section class="courses">
     <h1 class="heading">Khóa học đã mua</h1>
-    @if (count($courses)>1)
+    @if (count($courses)>0)
 
      
         <div class="box-container">

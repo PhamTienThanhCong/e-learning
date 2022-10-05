@@ -61,13 +61,13 @@
           </form> --}}
     
           <div class="thumb">
-             <img src="{{ asset("images/avatar/" . $courses->avatar) }}" alt="">
+             <img src="{{ asset("images/" . $courses->image) }}" alt="">
              <span>{{ $courses->number_lesson }} videos</span>
           </div>
        </div>
        <div class="column">
           <div class="tutor">
-             <img src="{{ asset("images/" . $courses->image) }}" alt="">
+             <img src="{{ asset("images/avatar/" . $courses->avatar) }}" alt="">
              <div>
                 <h3>{{ $courses->name_admin }}</h3>
                 <span>21-10-2022</span>
@@ -149,7 +149,7 @@
     <form action="#" method="GET" class="add-comment">
        <h3>Thêm bình luận</h3>
        <textarea name="comment_box" placeholder="Bình luận cua bạn" required maxlength="1000" cols="30" rows="10"></textarea>
-       <input type="submit" value="add comment" class="inline-btn" name="add_comment">
+       <input type="buttom" value="add comment" class="inline-btn" name="add_comment">
     </form>
  
     <h1 class="heading">Bình luận</h1>

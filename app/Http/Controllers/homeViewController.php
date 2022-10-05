@@ -121,8 +121,8 @@ class homeViewController extends Controller
     }
 
     public function buyCourse(Request $request){
-        $id_course = explode(",", $request->get('id-buy'));
-        $id_oder = explode(",", $request->get('id-not-buy'));
+        $id_oder = explode(",", $request->get('id-buy'));
+        $id_course = explode(",", $request->get('id-not-buy'));
         for ($i = 0; $i < count($id_course); $i++){
             $course = course::find($id_course[$i]);
             $order = order::query()
@@ -267,7 +267,7 @@ class homeViewController extends Controller
                 ->get();
         if (count($questions)==0){
             if ($this->updateViewHistory($course_id, $lesson_id+1) == false){
-                return redirect()->route('home.doneCourse', $course_id);
+                return redirect()->route('home.learnCourse', [$course_id, 1]);
             }
             return redirect()->route('home.learnCourse', [$course_id, $lesson_id+2]);
         }
@@ -276,78 +276,6 @@ class homeViewController extends Controller
             'lesson_id' => $lesson_id,
             'lesson'    => $lessons[$lesson_id - 1],
             'questions' => $questions,
-        ]);
-    }
-
-    public function check_answer(Request $request,$course_id, $lesson_id){
-        $questions = question::query()
-                ->select('questions.id', 'questions.question', 'questions.type', 'answers.answer', 'answers.id as id_answer', 'answers.check')
-                ->leftJoin('answers', 'questions.id', 'answers.questions_id')
-                ->where('lessons_id', '=', $request->get('id_lesson'))
-                ->get();
-        $id_question = 0;
-        $number_question = 0;
-        $number_false = 0;
-        $check_false = true;
-        foreach ($questions as $index=>$question) {
-            if ($id_question != $question->id) {
-                $id_question = $question->id;
-                $number_question++;
-                if ($check_false == false) {
-                    $number_false ++;
-                    $this->updateResult($questions[$index-1]->id, 0, 1);
-                }elseif($index > 0){
-                    $this->updateResult($questions[$index-1]->id, 1, 0);
-                }
-                $check_false = true;
-            }
-            if ($question->type == 1){
-                if (($request->get("a$question->id_answer") == '' && $question->check == 1) || ($request->get("a$question->id_answer") == 'on' && $question->check == 0)){
-                    $check_false = false;
-                }
-            }
-            if ($question->type == 2){
-                if (($request->get("$question->id") == $question->id_answer) && ($question->check == 0)){
-                    $check_false = false;
-                }
-            }
-        }
-        if ($check_false == false) {
-            $number_false ++;
-            $this->updateResult($questions[count($questions)-1]->id, 0, 1);
-        }else{
-            $this->updateResult($questions[count($questions)-1]->id, 1, 0);
-        }
-        if ($number_false < $number_question - $number_false){
-            if ($this->updateViewHistory($course_id, $lesson_id+1) == false){
-                return redirect()->route('home.doneCourse', $course_id);
-            }
-        }
-        return view('content.user.resultAnswer',[
-            'course_id'     => $course_id,
-            'lesson_id'     => $lesson_id,
-            'true_number'   => $number_question - $number_false,
-            'false_number'  => $number_false,
-        ]);
-    }
-
-    public function done_course($course_id){
-        $courses = course::query()
-            ->select('courses.*','admins.name as name_admin',DB::raw('COUNT(lessons.id) as number_lesson'))
-            ->join('admins', 'courses.id_admin', '=', 'admins.id')
-            ->leftJoin('lessons' , 'courses.id', 'lessons.courses_id')
-            ->where('courses.id', '=', $course_id)
-            ->groupBy('courses.id')
-            ->first();
-        $view =  View_history::query()
-            ->where('users_id', session()->get('id'))
-            ->where('courses_id', $course_id)
-            ->first();
-        if ($courses->number_lesson <  $view->number_view){
-            return redirect()->route('home.learnCourse',[$course_id, $courses->number_lesson]);
-        }
-        return view('content.user.doneCourse',[
-            'course' => $courses,
         ]);
     }
 

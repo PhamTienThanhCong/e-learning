@@ -14,45 +14,60 @@
 @stop
 
 @section('content')
-<div class="grid">
-    <div class="grid__row">
-        <div class="form-info">
-            <div class="avatar-preview">
-                <div class="avatar">
-                    <img src="{{ asset("images/avatar/" . Session::get('image')) }}" alt="{{ Session::get('name') }}">
+<section class="user-profile">
+
+    <h1 class="heading">your profile</h1>
+ 
+    <div class="info">
+ 
+       <div class="user">
+          <img src="{{ asset("images/avatar/" . Session::get('image')) }}" alt="">
+          <h3>{{ Session::get('name') }}</h3>
+          <p>student</p>
+          <a href="#" class="inline-btn">update profile</a>
+       </div>
+    
+       <div class="box-container">
+    
+          <div class="box">
+             <div class="flex">
+                <i class="fas fa-bookmark"></i>
+                <div>
+                   <span>{{ $user->number_buy }}</span>
+                   <p>Đã mua</p>
                 </div>
-            </div>
-            <div class="content-infor">
-                <div class="name-infor">
-                    Tên: {{ Session::get('name') }}
+             </div>
+             <a href="#" class="inline-btn">view playlists</a>
+          </div>
+    
+          <div class="box">
+             <div class="flex">
+                <i class="fas fa-heart"></i>
+                <div>
+                   <span>33</span>
+                   <p>Đã Thích</p>
                 </div>
-                <div class="infor-content">
-                    <p>
-                        Email: {{ $user->email }}
-                    </p>
-                    <p>
-                        <a href="{{ route('home.myCourse') }}" style="text-decoration: none; color:black">
-                            Khóa học đã mua: {{ $user->number_buy }} khóa
-                        </a>
-                    </p>
-                    <p>
-                        Số tiền đã chi trả: 
-                        {{ number_format($user->total_price, 0, '', ',') }} đ
-                    </p>
+             </div>
+             <a href="#" class="inline-btn">view liked</a>
+          </div>
+    
+          <div class="box">
+             <div class="flex">
+                <i class="fas fa-comment"></i>
+                <div>
+                   <span>2</span>
+                   <p>Hoàn thành</p>
                 </div>
-            </div>
-        </div>
-        <div class="action">
-            <button>
-                Chỉnh sửa thông tin cá nhân
-            </button>
-            <br>
-            <button style="background-color:rgba(218, 19, 19, 0.623)">
-                Thay đổi mật khẩu
-            </button>
-        </div>
+             </div>
+             <a href="#" class="inline-btn">view comments</a>
+          </div>
+    
+       </div>
     </div>
-</div>
+ 
+ </section>
+
+
 @stop
 
 @section('js')
