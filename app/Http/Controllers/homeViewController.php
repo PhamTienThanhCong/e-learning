@@ -161,22 +161,6 @@ class homeViewController extends Controller
         return redirect()->route('home.myCourse');
     }
 
-    public function myCourse(){
-        $course = course::query()
-            ->select('courses.*','admins.name as name_admin',DB::raw('COUNT(lessons.courses_id) as number_lesson'))
-            ->join('admins', 'courses.id_admin', '=', 'admins.id')
-            ->join('orders', 'courses.id', '=', 'orders.courses_id')
-            ->leftJoin('lessons' , 'courses.id', '=', 'lessons.courses_id')
-            ->where('courses.type', '=', '2')
-            ->where('orders.users_id', '=', session()->get('id'))
-            ->groupBy('courses.id')
-            ->paginate(12);
-
-        return view('content.user.myCourse',[
-            'courses' => $course,
-        ]);
-    }
-
     public function ratingCourse(Request $request, $course_id){
         DB::table('orders')
         ->where('users_id', '=', session()->get('id'))
