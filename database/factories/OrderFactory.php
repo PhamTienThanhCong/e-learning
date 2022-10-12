@@ -14,11 +14,7 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            'users_id'      => $this->faker->numberBetween(1,1199),
-            'courses_id'    => $this->faker->numberBetween(1,201),
-            'price_buy'     => $this->faker->numberBetween(50000, 1000000),
-            'rate'          => $this->faker->numberBetween(1, 5),
-            'comment'       => $this->faker->name() . " đã mua và trải nghiệm",
+            //
         ];
     }
 }

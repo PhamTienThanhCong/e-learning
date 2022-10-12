@@ -22,7 +22,7 @@
     <nav class="navbar">
        <a href="{{ route('home.course') }}"><i class="fas fa-home"></i><span>home</span></a>
        <a href="#"><i class="fas fa-question"></i><span>about</span></a>
-       <a href="#"><i class="fas fa-graduation-cap"></i><span>my courses</span></a>
+       <a href="{{ route('home.myCourse') }}"><i class="fas fa-graduation-cap"></i><span>my courses</span></a>
        <a href="{{ route('home.myCart') }}"><i class="fa-solid fa-cart-shopping"></i><span>my cart</span></a>
        <a href="#"><i class="fas fa-chalkboard-user"></i><span>teachers</span></a>
        <a href="#"><i class="fas fa-headset"></i><span>contact us</span></a>

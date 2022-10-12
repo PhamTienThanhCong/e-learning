@@ -6,7 +6,6 @@ use App\Models\course;
 use App\Models\View_history;
 use App\Models\lesson;
 use App\Models\order;
-use App\Models\question;
 use App\Models\result;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,13 +13,12 @@ use Illuminate\Support\Facades\DB;
 class homeViewController extends Controller
 {
     public function course(Request $request){
-        $search = $request->get('keyword');
+        // Lấy thông tin từ khóa học course
         $course = course::query()
             ->select('courses.*','admins.name as name_admin',DB::raw('COUNT(lessons.courses_id) as number_lesson'))
             ->join('admins', 'courses.id_admin', '=', 'admins.id')
             ->leftJoin('lessons' , 'courses.id', '=', 'lessons.courses_id')
             ->where('courses.type', '=', '2')
-            ->where('courses.name', 'like', '%'. $search .'%')
             ->groupBy('courses.id')
             ->paginate(12);;
         return view('content.user.course',[
@@ -29,6 +27,7 @@ class homeViewController extends Controller
     }
 
     public function viewCourse($course_id){
+        // Lấy thông tin từ khóa học course
         $course = course::query()
             ->select('courses.*','admins.name as name_admin','admins.image as avatar',DB::raw('COUNT(lessons.courses_id) as number_lesson'), DB::raw('AVG(`orders`.`rate`) AS rate_course'))
             ->join('admins', 'courses.id_admin', '=', 'admins.id')
@@ -39,18 +38,13 @@ class homeViewController extends Controller
             ->groupBy('courses.id')
             ->firstOrFail();
 
+        // Lấy tất cả từ bài học từ khóa học
         $lessons = lesson::query()
             ->select('*')
             ->where('courses_id', '=', $course_id)
             ->get();
 
-        $order_rate = order::query()
-            ->select('orders.rate', 'orders.comment', 'orders.updated_at', 'users.name', 'users.image')
-            ->join('users', 'orders.users_id', '=', 'users.id')
-            ->where('orders.courses_id', '=', $course_id)
-            ->where('orders.rate', '!=', 'null')
-            ->paginate(10);
-
+        // Kiểm tra xem khóa học này đã được mua chưa
         $my_order = order::query()
             ->select('*')
             ->where('users_id', '=', session()->get('id'))
@@ -74,13 +68,12 @@ class homeViewController extends Controller
             'courses'    => $course,
             'lessons'    => $lessons,
             'check'      => $check,
-            'order_rate' => $order_rate,
             'my_order'   => $my_order,
         ]);
     }
 
     public function orderCourse($course_id){
-
+        // lấy thông tin khóa học
         $course = course::query()
             ->select('courses.*','admins.name as author')
             ->join('admins', 'courses.id_admin', '=', 'admins.id')
@@ -88,6 +81,7 @@ class homeViewController extends Controller
             ->where('courses.id', '=', $course_id)
             ->firstOrFail();
 
+        // Lưu thông tin bài học vào session
         session()->push('id_course', $course->id);
         session()->push('name_course', $course->name);
         session()->push('price_course', $course->price);
@@ -98,6 +92,7 @@ class homeViewController extends Controller
     }
 
     public function unOrderCourse($course_id) {
+        // hủy đặt hàng khóa học
         $id = session()->get('id_course') == null ? [] : session()->get('id_course');
         $name = session()->get('name_course') == null ? [] : session()->get('name_course');
         $price = session()->get('price_course') == null ? [] : session()->get('price_course');
@@ -161,6 +156,22 @@ class homeViewController extends Controller
         return redirect()->route('home.myCourse');
     }
 
+    public function myCourse(){
+        $course = course::query()
+            ->select('courses.*','admins.name as name_admin',DB::raw('COUNT(lessons.courses_id) as number_lesson'))
+            ->join('admins', 'courses.id_admin', '=', 'admins.id')
+            ->join('orders', 'courses.id', '=', 'orders.courses_id')
+            ->leftJoin('lessons' , 'courses.id', '=', 'lessons.courses_id')
+            ->where('courses.type', '=', '2')
+            ->where('orders.users_id', '=', session()->get('id'))
+            ->groupBy('courses.id')
+            ->paginate(12);
+
+        return view('content.user.myCourse',[
+            'courses' => $course,
+        ]);
+    }
+
     public function ratingCourse(Request $request, $course_id){
         DB::table('orders')
         ->where('users_id', '=', session()->get('id'))
@@ -199,68 +210,6 @@ class homeViewController extends Controller
         $result->number_true += $true_number;
         $result->number_false += $false_number;
         $result->save();
-    }
-
-    public function learnCourse($course_id, $lesson_id){
-        $course_check = View_history::query()
-                ->select('number_view')
-                ->where('users_id', '=', session()->get('id'))
-                ->where('courses_id', '=', $course_id)
-                ->first();
-        if (!isset($course_check)){
-            return redirect()->route('home.viewCourse', $course_id);
-        }elseif ($course_check->number_view < $lesson_id){
-            return redirect()->route('home.learnCourse', [$course_id, $course_check->number_view]);
-        }
-        $lesson_id -= 1;
-        $lessons = lesson::query()
-            ->select('lessons.*', DB::raw('COUNT(questions.id) as number_question'))
-            ->leftJoin('questions', 'lessons.id', '=', 'questions.lessons_id')
-            ->where('lessons.courses_id', '=', $course_id)
-            ->groupBy('lessons.id')
-            ->get();
-        return view('content.user.learnCourse',[
-            'lessons'       => $lessons,
-            'course_id'     => $course_id,
-            'lesson_id'     => $lesson_id,
-            'number_learn'  => $course_check->number_view,
-        ]);
-    }
-
-    public function next_lesson($course_id, $lesson_id){
-        $course_check = View_history::query()
-                ->select('number_view')
-                ->where('users_id', '=', session()->get('id'))
-                ->where('courses_id', '=', $course_id)
-                ->first();
-        if (!isset($course_check->number_view)){
-            return redirect()->route('home.viewCourse', $course_id);
-        }elseif ($course_check->number_view < $lesson_id){
-            return redirect()->route('home.learnCourse', [$course_id, $course_check->number_view]);
-        }elseif ($course_check->number_view > $lesson_id){
-            return redirect()->route('home.learnCourse', [$course_id, $lesson_id+1]);
-        }
-        $lessons = lesson::query()
-                ->where('lessons.courses_id', '=', $course_id)
-                ->groupBy('lessons.id')
-                ->get();
-        $questions = question::query()
-                ->select('questions.id', 'questions.question', 'questions.type', 'answers.answer', 'answers.id as id_answer')
-                ->leftJoin('answers', 'questions.id', 'answers.questions_id')
-                ->where('lessons_id', '=', $lessons[$lesson_id - 1]->id)
-                ->get();
-        if (count($questions)==0){
-            if ($this->updateViewHistory($course_id, $lesson_id+1) == false){
-                return redirect()->route('home.learnCourse', [$course_id, 1]);
-            }
-            return redirect()->route('home.learnCourse', [$course_id, $lesson_id+2]);
-        }
-        return view('content.user.answerLesson',[
-            'course_id' => $course_id,
-            'lesson_id' => $lesson_id,
-            'lesson'    => $lessons[$lesson_id - 1],
-            'questions' => $questions,
-        ]);
     }
 
 }

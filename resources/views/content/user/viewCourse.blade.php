@@ -46,7 +46,7 @@
                 </button>
             </a>
         @elseif ($check == 3)
-            <a class="save-playlist" href="{{ route('home.learnCourse', [$courses->id,1]) }}">
+            <a class="save-playlist" href="#">
                 <button class="btn-action-course">
                     <span>
                         Học khóa học
@@ -131,7 +131,7 @@
     <div class="box-container">
 
         @foreach ($lessons as $index => $lesson)
-            <a class="box" href="{{ route('home.learnCourse',[$courses->id, $index + 1]) }}">
+            <a class="box" href="#">
                 <i class="fas fa-play"></i>
                 <img src="{{ asset("images/" . $courses->image) }}" alt="">
                 <h3>Bài {{ $index+1 }} - {{ $lesson->name }}</h3>
