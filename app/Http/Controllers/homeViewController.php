@@ -115,48 +115,35 @@ class homeViewController extends Controller
         return redirect()->route('home.myCart');
     }
 
+    public function myCart(){
+        return view('content.user.myCart');
+    }
+
     public function buyCourse(Request $request){
-        $id_oder = explode(",", $request->get('id-buy'));
-        $id_course = explode(",", $request->get('id-not-buy'));
+        // Lấy id khóa học  từ session
+        $id_course = explode(",", $request->get('id-buy'));
         for ($i = 0; $i < count($id_course); $i++){
             $course = course::find($id_course[$i]);
+            // Lưu vào bảng order
             $order = order::query()
             ->create([
                 'users_id'  => session()->get('id'),
                 'courses_id' => $course->id,
                 'price_buy'  => $course->price,
             ]);
-            View_history::query()
-            ->create([
-                'users_id'  => session()->get('id'),
-                'courses_id' => $course->id,
-                'number_view'  => 1,
-            ]);
         }
-
-        $id = session()->get('id_course') == null ? [] : session()->get('id_course');
-        $name = session()->get('name_course') == null ? [] : session()->get('name_course');
-        $price = session()->get('price_course') == null ? [] : session()->get('price_course');
-        $author = session()->get('author_course') == null ? [] : session()->get('author_course');
 
         session()->forget('id_course');
         session()->forget('name_course');
         session()->forget('price_course');
         session()->forget('author_course');
 
-        for ($i = 0; $i < count($id) ; $i++) {
-            if(in_array($id[$i], $id_oder)){
-                session()->push('id_course', $id[$i]);
-                session()->push('name_course', $name[$i]);
-                session()->push('price_course', $price[$i]);
-                session()->push('author_course', $author[$i]);
-            }
-        }
 
         return redirect()->route('home.myCourse');
     }
 
     public function myCourse(){
+        // Lấy thông tin khóa học đã mua
         $course = course::query()
             ->select('courses.*','admins.name as name_admin',DB::raw('COUNT(lessons.courses_id) as number_lesson'))
             ->join('admins', 'courses.id_admin', '=', 'admins.id')
@@ -170,46 +157,6 @@ class homeViewController extends Controller
         return view('content.user.myCourse',[
             'courses' => $course,
         ]);
-    }
-
-    public function ratingCourse(Request $request, $course_id){
-        DB::table('orders')
-        ->where('users_id', '=', session()->get('id'))
-        ->where('courses_id', '=', $course_id)
-        ->update([
-            'rate' => $request->get('rating'),
-            'comment' => $request->get('comment')
-        ]);
-        return redirect()->route('home.viewCourse', $course_id);
-    }
-
-    public function myCart(){
-        return view('content.user.myCart');
-    }
-
-    public function updateViewHistory($course, $number_update){
-        $number_lesson = course::query()
-            ->select(DB::raw('COUNT(lessons.id) as number_lesson'))
-            ->leftJoin('lessons' , 'courses.id', 'lessons.courses_id')
-            ->where('courses.id', '=', $course)
-            ->groupBy('courses.id')
-            ->first();
-        if ($number_lesson->number_lesson >= $number_update){
-            $view =  DB::table('view_histories')
-                ->where('users_id', session()->get('id'))
-                ->where('courses_id', $course)
-                ->update(['number_view' => $number_update]);
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public function updateResult($question_id,$true_number,$false_number){
-        $result = result::find($question_id);
-        $result->number_true += $true_number;
-        $result->number_false += $false_number;
-        $result->save();
     }
 
 }

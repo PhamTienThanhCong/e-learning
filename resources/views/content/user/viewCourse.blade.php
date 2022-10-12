@@ -55,10 +55,6 @@
                 </button>
             </a>
         @endif
-
-          {{-- <form action="" method="post" class="save-playlist">
-             <button type="submit"><i class="far fa-bookmark"></i> <span>save playlist</span></button>
-          </form> --}}
     
           <div class="thumb">
              <img src="{{ asset("images/" . $courses->image) }}" alt="">
@@ -105,7 +101,7 @@
  
  <section class="playlist-videos">
 
-    <h1 class="heading">Mô tả cái nhẹ</h1>
+    <h1 class="heading">Mô tả bài học</h1>
  
     <div class="description-course" style="font-size: 16px">
         {!! $courses->description !!}
@@ -148,8 +144,12 @@
  
     <form action="#" method="GET" class="add-comment">
        <h3>Thêm bình luận</h3>
-       <textarea name="comment_box" placeholder="Bình luận cua bạn" required maxlength="1000" cols="30" rows="10"></textarea>
-       <input type="buttom" value="add comment" class="inline-btn" name="add_comment">
+       @if ($check == 3)
+            <textarea name="comment_box" placeholder="Bình luận cua bạn" required maxlength="1000" cols="30" rows="10"></textarea>
+            <input type="buttom" value="add comment" class="inline-btn" name="add_comment"> 
+       @else
+            <h3 style="text-align: center">Mua khóa học để bình luận</h3>
+       @endif
     </form>
  
     <h1 class="heading">Bình luận</h1>

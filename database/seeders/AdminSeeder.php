@@ -16,12 +16,6 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('admins')->insert([
-            'name' => Str::random(10),
-            'email' => Str::random(10).'@gmail.com',
-            'description' => Str::random(20),
-            'token' => bin2hex(random_bytes(16)),
-            'password' => Hash::make('password'),
-        ]);
+
     }
 }
