@@ -50,6 +50,13 @@ class homeViewController extends Controller
             ->where('users_id', '=', session()->get('id'))
             ->where('courses_id', '=', $course_id)
             ->first();
+        // Lấy giá trị từ bảng order qua courses_id 
+        $orders = order::query()
+            ->select('orders.*', 'users.name as name_user', 'users.image as avatar')
+            ->join('users', 'orders.users_id', '=', 'users.id')
+            ->where('courses_id', '=', $course_id)
+            ->where('orders.comment', '!=', NULL)
+            ->get();
         
         $check = 1;
         if(session()->has('id_course')){
@@ -69,6 +76,7 @@ class homeViewController extends Controller
             'lessons'    => $lessons,
             'check'      => $check,
             'my_order'   => $my_order,
+            'orders'     => $orders,
         ]);
     }
 
@@ -156,6 +164,35 @@ class homeViewController extends Controller
 
         return view('content.user.myCourse',[
             'courses' => $course,
+        ]);
+    }
+
+    // bình luận đánh giá 
+    public function ratingCourse(Request $request, $course_id){
+        DB::table('orders')
+        ->where('users_id', '=', session()->get('id'))
+        ->where('courses_id', '=', $course_id)
+        ->update([
+            'rate' => $request->get('rating'),
+            'comment' => $request->get('comment')
+        ]);
+        return redirect()->route('home.viewCourse', $course_id);
+    }
+
+    // Xem bài học
+    public function learnCourse($course_id, $lesson_id){
+        $lessons = lesson::query()
+            ->select('lessons.*')
+            ->where('lessons.courses_id', '=', $course_id)
+            ->groupBy('lessons.id')
+            ->get();
+        if (count($lessons) - 1 <= $lesson_id){
+            $lesson_id = count($lessons) - 1;
+        }
+        return view('content.user.learnCourse',[
+            'lessons'       => $lessons,
+            'course_id'     => $course_id,
+            'lesson_id'     => $lesson_id
         ]);
     }
 
