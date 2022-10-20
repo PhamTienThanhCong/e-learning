@@ -11,6 +11,7 @@
         padding: 10px;
     }
 </style>
+<link rel="stylesheet" href="{{ asset('css/user/rating.css') }}">
 @stop
 
 @section('title')
@@ -46,7 +47,7 @@
                 </button>
             </a>
         @elseif ($check == 3)
-            <a class="save-playlist" href="#">
+            <a class="save-playlist" href="{{ route('home.learnCourse', [$courses->id,1]) }}">
                 <button class="btn-action-course">
                     <span>
                         Học khóa học
@@ -55,6 +56,10 @@
                 </button>
             </a>
         @endif
+
+          {{-- <form action="" method="post" class="save-playlist">
+             <button type="submit"><i class="far fa-bookmark"></i> <span>save playlist</span></button>
+          </form> --}}
     
           <div class="thumb">
              <img src="{{ asset("images/" . $courses->image) }}" alt="">
@@ -101,7 +106,7 @@
  
  <section class="playlist-videos">
 
-    <h1 class="heading">Mô tả bài học</h1>
+    <h1 class="heading">Mô tả cái nhẹ</h1>
  
     <div class="description-course" style="font-size: 16px">
         {!! $courses->description !!}
@@ -127,7 +132,7 @@
     <div class="box-container">
 
         @foreach ($lessons as $index => $lesson)
-            <a class="box" href="#">
+            <a class="box" href="{{ route('home.learnCourse',[$courses->id, $index + 1]) }}">
                 <i class="fas fa-play"></i>
                 <img src="{{ asset("images/" . $courses->image) }}" alt="">
                 <h3>Bài {{ $index+1 }} - {{ $lesson->name }}</h3>
@@ -141,63 +146,49 @@
  <section class="comments">
 
     <h1 class="heading">4 Bình luận</h1>
- 
-    <form action="#" method="GET" class="add-comment">
-       <h3>Thêm bình luận</h3>
-       @if ($check == 3)
-            <textarea name="comment_box" placeholder="Bình luận cua bạn" required maxlength="1000" cols="30" rows="10"></textarea>
-            <input type="buttom" value="add comment" class="inline-btn" name="add_comment"> 
-       @else
-            <h3 style="text-align: center">Mua khóa học để bình luận</h3>
-       @endif
-    </form>
+    @if ($check == 3)
+        <form action="{{ route('home.ratingCourse',$courses->id) }}" method="POST" class="add-comment">
+        <h3>Thêm bình luận</h3>
+        @csrf
+        <fieldset class="rating">
+            <input type="radio" id="star5" name="rating" value="5" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+            <input type="radio" id="star4" name="rating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+            <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+            <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+            <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+        </fieldset>
+        <textarea name="comment" placeholder="Bình luận cua bạn" required maxlength="1000" cols="30" rows="10">{{ $my_order['comment'] }}</textarea>
+        <input type="submit" value="add comment" class="inline-btn" name="add_comment">
+        </form>
+    @else
+        <form action="#" method="GET" class="add-comment">
+            <h3 style="text-align: center">Mua khóa học để đánh giá</h3>
+        </form>
+    @endif
+
+    
  
     <h1 class="heading">Bình luận</h1>
  
     <div class="box-container">
- 
-       <div class="box">
-          <div class="user">
-             <img src="{{ asset("images/avatar/avatar.png") }}" alt="">
-             <div>
-                <h3>Đặng Hồng Hạnh</h3>
-                <span>05-10-2022</span>
-             </div>
-          </div>
-          <div class="comment-box">Em nhớ anh :(</div>
-       </div>
-
+       
+       @foreach ($orders as $order)
          <div class="box">
+             <span style="font-size: 16px; display:block; margin-bottom: 10px">{{ $order['created_at'] }}</span>
              <div class="user">
-                 <img src="{{ asset("images/avatar/avatar.png") }}" alt="">
+                 <img src="{{ asset("images/avatar") }}/{{ $order['avatar'] }}" alt="">
                  <div>
-                 <h3>Nguyễn Thị Lệ</h3>
-                 <span>05-10-2022</span>
-                 </div>
-             </div>
-             <div class="comment-box">Bài học hay</div>
+                 <h3>{{ $order['name_user'] }}</h3>
+                 <span>
+                    @for ($i = 0 ; $i < $order['rate'] ; $i++)
+                        <i class="fa-solid fa-star" style="color: rgb(230, 83, 39);"></i>
+                    @endfor
+                 </span>
+                </div>
+            </div>
+             <div class="comment-box">{{ $order['comment'] }}</div>
          </div>
-         <div class="box">
-            <div class="user">
-                <img src="{{ asset("images/avatar/avatar.png") }}" alt="">
-                <div>
-                <h3>Ngô van Phong</h3>
-                <span>05-10-2022</span>
-                </div>
-            </div>
-            <div class="comment-box">Đáng để thử</div>
-        </div>
-
-        <div class="box">
-            <div class="user">
-                <img src="{{ asset("images/avatar/avatar.png") }}" alt="">
-                <div>
-                <h3>Hậu</h3>
-                <span>05-10-2022</span>
-                </div>
-            </div>
-            <div class="comment-box">Hay</div>
-        </div>
+        @endforeach
  
     </div>
  
