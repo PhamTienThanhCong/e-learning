@@ -5,7 +5,6 @@ use App\Http\Controllers\authAdminController;
 use App\Http\Controllers\homeViewController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\userController;
-use App\Http\Middleware\AdminDontLogin;
 use App\Http\Middleware\AdminWasLogin;
 use App\Http\Middleware\UserWasLogin;
 use App\Http\Middleware\SellerWasLogin;
@@ -49,4 +48,26 @@ Route::get('/gio-hang', [homeViewController::class , 'myCart'])->name('home.myCa
 
 Route::get('/', [homeViewController::class , 'course'])->name('home.course');
 
-// User
+// Admin
+
+Route::get('/admin', function () {
+    return view('auth.loginAdmin');
+})->name('admin.login');
+
+Route::get('/admin/register', function () {
+    return view('auth.registerAdmin');
+})->name('admin.register');
+
+Route::post('/admin/login_processing', [authAdminController::class, 'login'])->name('admin.processing.login');
+Route::post('/admin/register_processing', [authAdminController::class, 'register'])->name('admin.processing.register');
+Route::get('/account/logout', [authAdminController::class, 'logout'])->name('admin.logout');  
+
+// Admin and Seller
+Route::group([
+    'middleware' => AdminSellerWasLogin::class,
+],function(){
+    Route::get('/account/tai-khoan-cua-toi', [authAdminController::class, 'myAccount'])->name('admin.myAccount');
+    Route::put('/account/tai-khoan-cua-toi/thay-doi', [authAdminController::class, 'updateMyAccount'])->name('admin.myAccountUpdate');
+    Route::put('/account/tai-khoan-cua-toi/thay-doi-mat-khau', [authAdminController::class, 'updateMyPassword'])->name('admin.myAccountUpdatePassword');
+
+});
