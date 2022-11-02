@@ -67,7 +67,6 @@ class authAdminController extends Controller
                 ->where('courses.id_admin', '=', session()->get('id'))
                 ->first();
         return view('auth.myAccount',[
-            'url' => $this->breadcrumb(),
             'admin' => $admin,
             'course' => $course,
         ]);

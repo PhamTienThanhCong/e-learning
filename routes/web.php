@@ -69,5 +69,26 @@ Route::group([
     Route::get('/account/tai-khoan-cua-toi', [authAdminController::class, 'myAccount'])->name('admin.myAccount');
     Route::put('/account/tai-khoan-cua-toi/thay-doi', [authAdminController::class, 'updateMyAccount'])->name('admin.myAccountUpdate');
     Route::put('/account/tai-khoan-cua-toi/thay-doi-mat-khau', [authAdminController::class, 'updateMyPassword'])->name('admin.myAccountUpdatePassword');
+});
+
+Route::group([
+    'middleware' => SellerWasLogin::class,
+],function(){
+    Route::get('/seller/tong-quan', [SellerController::class, 'overview'])->name('seller.overview');
+    
+    Route::get('/seller/tao-khoa-hoc', [SellerController::class, 'createCourse'])->name('seller.addCourse');
+    Route::post('seller/tao-khoa-hoc/xu-ly', [SellerController::class, 'createCourseProcessing'])->name('seller.addCourseProcessing');
+    
+    Route::get('/seller/quan-ly-khoa-hoc', [SellerController::class, 'manageCourse'])->name('seller.managerCourse');
+    
+    Route::get('/seller/quan-ly-khoa-hoc/chi-tiet-id-{course}', [SellerController::class, 'detailCourse'])->name('seller.detailCourse');
+    
+    Route::get('/seller/quan-ly-khoa-hoc/chi-tiet-id-{course}/create-Lesson',[SellerController::class, 'createLesson'])->name('seller.createLesson');
+    Route::post('/seller/quan-ly-khoa-hoc/chi-tiet-id-{course}/create-Lesson/xuly', [SellerController::class, 'createLessonProcessing'])->name('seller.addLessonProcessing');
+    
+    Route::get('/seller/quan-ly-khoa-hoc/chi-tiet-id-{course}/Tao-Cau-Hoi{lesson}', [SellerController::class, 'createQuestion'])->name('seller.addQuestion');
+    Route::post('/seller/quan-ly-khoa-hoc/chi-tiet-id-{course}/Tao-Cau-Hoi{lesson}/xu-ly', [SellerController::class, 'createQuestionProcessing'])->name('seller.addQuestionProcessing');
+    
+    Route::get('/seller/quan-ly-khoa-hoc/chi-tiet-id-{course}/Quan-Ly-Bai-Hoc-{lesson}', [SellerController::class, 'manageLesson'])->name('seller.manageLesson');
 
 });

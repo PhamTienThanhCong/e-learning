@@ -19,8 +19,7 @@
 
     <div class="video-container">
        <div class="video">
-        <iframe width="100%" height="500px" src="{{ $lessons[$lesson_id]->link }}" ></iframe>
-          {{-- <video src="images/vid-1.mp4" controls poster="images/post-1-1.png" id="video"></video> --}}
+          <video src="{{ asset('videos/') }}/{{ $lessons[$lesson_id]->link }}" controls poster="images/post-1-1.png" id="video"></video>
        </div>
        <h3 class="title">Bài học: {{ $lessons[$lesson_id]->name }}</h3>
        <div class="info">
