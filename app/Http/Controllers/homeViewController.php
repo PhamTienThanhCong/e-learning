@@ -50,14 +50,14 @@ class homeViewController extends Controller
             ->where('users_id', '=', session()->get('id'))
             ->where('courses_id', '=', $course_id)
             ->first();
-        // Lấy giá trị từ bảng order qua courses_id 
+        // Lấy giá trị từ bảng order qua courses_id
         $orders = order::query()
             ->select('orders.*', 'users.name as name_user', 'users.image as avatar')
             ->join('users', 'orders.users_id', '=', 'users.id')
             ->where('courses_id', '=', $course_id)
             ->where('orders.comment', '!=', NULL)
             ->get();
-        
+
         $check = 1;
         if(session()->has('id_course')){
             foreach (session()->get('id_course') as $cour){
@@ -96,7 +96,7 @@ class homeViewController extends Controller
         session()->push('author_course', $course->author);
 
         return redirect()->route('home.viewCourse', $course_id);
-    
+
     }
 
     public function unOrderCourse($course_id) {
@@ -167,7 +167,7 @@ class homeViewController extends Controller
         ]);
     }
 
-    // bình luận đánh giá 
+    // bình luận đánh giá
     public function ratingCourse(Request $request, $course_id){
         DB::table('orders')
         ->where('users_id', '=', session()->get('id'))

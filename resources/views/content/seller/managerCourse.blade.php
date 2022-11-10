@@ -56,7 +56,7 @@
                         @endif
                         <th> Đã bán </th>
                         <th> Cập nhập lần cuối </th>
-                        <th> Trạng thái </th>
+
                         <th> Xem </th>
                     </tr>
                 </thead>
@@ -64,37 +64,29 @@
                     @foreach ($data as $course)
                         <tr>
                             <td> {{ $course->name }} </td>
-                            <td> {{ number_format($course->price, 0, '', ',') }} VND</td> 
+                            <td> {{ number_format($course->price, 0, '', ',') }} VND</td>
                             @if (Session::get('lever') == '2')
                             <th>
                                 <a href="{{ route('admin.managerCourse', $course->name_admin) }}">
-                                    {{ $course->name_admin }} 
+                                    {{ $course->name_admin }}
                                 </a>
                             </th>
-                            @endif                                                                                                             
+                            @endif
                             <td>
                                 {{ $course->number_buy }}
                             </td>
                             <td>
                                 {{ date('d-m-Y', strtotime($course->updated_at)) }}
                             </td>
-                            <td>
-                                @if ($course->type == 1)
-                                    <label class="badge badge-warning">Đang chờ</label>
-                                @elseif ($course->type == 2)
-                                    <label class="badge badge-primary">Đã duyệt</label>
-                                @elseif ($course->type == 0)
-                                    <label class="badge badge-danger">Đã Hủy</label>
-                                @endif
-                            </td>
+
                             <th>
                                 @if (Session::get('lever') == '1')
                                     <a href="{{ route('seller.detailCourse', $course->id) }}">Xem </a>
                                 @else
-                                    <a href="{{ route('admin.mamagerDetailCourses', [$course->name_admin, $course->id]) }}">Xem </a> 
+                                    <a href="{{ route('admin.mamagerDetailCourses', [$course->name_admin, $course->id]) }}">Xem </a>
                                 @endif
                             </th>
-                        </tr> 
+                        </tr>
                     @endforeach
 
                 </tbody>
@@ -103,7 +95,7 @@
             {{ $data->links() }}
         </div>
     </div>
-    
+
 @stop
 
 @section('js')

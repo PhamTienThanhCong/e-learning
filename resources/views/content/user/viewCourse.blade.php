@@ -23,16 +23,16 @@
 <section class="playlist-details">
 
     <h1 class="heading">{{ $courses->name }}</h1>
- 
+
     <div class="row">
- 
+
        <div class="column">
 
         @if ($check == 1)
             <a class="save-playlist" href="{{ route('home.orderCourse', $courses->id) }}">
                 <button class="btn-action-course">
                     <span>
-                        Đặt khóa học 
+                        Đặt khóa học
                     </span>
                     <i class="fa-solid fa-cart-plus"></i>
                 </button>
@@ -60,7 +60,7 @@
           {{-- <form action="" method="post" class="save-playlist">
              <button type="submit"><i class="far fa-bookmark"></i> <span>save playlist</span></button>
           </form> --}}
-    
+
           <div class="thumb">
              <img src="{{ asset("images/" . $courses->image) }}" alt="">
              <span>{{ $courses->number_lesson }} videos</span>
@@ -74,7 +74,7 @@
                 <span>21-10-2022</span>
              </div>
           </div>
-    
+
           <div class="details">
              <h3>{{ $courses->name }}</h3>
              <p style="padding: 0.6rem 0">
@@ -101,13 +101,13 @@
           </div>
        </div>
     </div>
- 
+
  </section>
- 
+
  <section class="playlist-videos">
 
-    <h1 class="heading">Mô tả cái nhẹ</h1>
- 
+    <h1 class="heading">Mô tả</h1>
+
     <div class="description-course" style="font-size: 16px">
         {!! $courses->description !!}
     </div>
@@ -117,7 +117,7 @@
  <section class="playlist-videos">
 
     <h1 class="heading">Các bài học của khóa học</h1>
- 
+
     @if ($check != 3)
         <div class="description-course" style="font-size: 16px">
             <ol style="margin-left: 25px">
@@ -139,7 +139,7 @@
             </a>
         @endforeach
     </div>
- 
+
     @endif
  </section>
 
@@ -166,12 +166,12 @@
         </form>
     @endif
 
-    
- 
+
+
     <h1 class="heading">Bình luận</h1>
- 
+
     <div class="box-container">
-       
+
        @foreach ($orders as $order)
          <div class="box">
              <span style="font-size: 16px; display:block; margin-bottom: 10px">{{ $order['created_at'] }}</span>
@@ -189,9 +189,9 @@
              <div class="comment-box">{{ $order['comment'] }}</div>
          </div>
         @endforeach
- 
+
     </div>
- 
+
  </section>
 
 @stop

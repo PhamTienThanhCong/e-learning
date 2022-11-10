@@ -52,9 +52,9 @@ class SellerController extends Controller
         if ($t == ""){ $t = "3"; }
 
         $Show = ["1","2"];
-        
+
         if ($t != "3"){ $Show = [$t]; }
-        
+
         $course = course::query()
             ->select('courses.*',DB::raw('COUNT(orders.id) as number_buy'))
             ->leftJoin('orders', 'courses.id', '=', 'orders.courses_id')
@@ -74,7 +74,7 @@ class SellerController extends Controller
         ]);
     }
 
-    // Kiểm tra xem khóa học này có phải của mình không 
+    // Kiểm tra xem khóa học này có phải của mình không
     public function getMyCourse($course){
         $my_course = course::query()
             ->select('*')
@@ -119,7 +119,7 @@ class SellerController extends Controller
         for ($i = 0; $i < count($my_rate); $i++) {
             $total_rate += $my_rate[$i]->rate;
         }
-        
+
         return view('content.seller.detailCourse', [
             'course'    => $course,
             'data'      => $my_course,
@@ -145,7 +145,7 @@ class SellerController extends Controller
         if (!isset($my_course->name)){
             dd("fail");
         }
-        
+
         $filename = Session::get('name') . "Video" . time().'.'.request()->video->getClientOriginalExtension();
         request()->video->move(public_path('videos'), $filename);
         $lesson = lesson::query()
@@ -156,7 +156,7 @@ class SellerController extends Controller
                 'description'  => $request->get('description'),
             ]);
 
-        return redirect()->route('seller.detailCourse', [$course]);  
+        return redirect()->route('seller.detailCourse', [$course]);
     }
 
     public function manageLesson($course, $lesson){
