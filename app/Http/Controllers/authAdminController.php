@@ -35,10 +35,7 @@ class authAdminController extends Controller
             if (!Hash::check($request->get('password'), $admin->password)){
                 return redirect()->route('admin.login')->with('error','Tài khoản hoặc mật khẩu không đúng');
             }
-            // Tài khoản chưa đucợ xác nhận thì phải xác nhận
-            if ($admin->lever == 0){
-                return redirect()->route('admin.login')->with('success','Tài khoản của bạn đang chờ xác nhận, vui đăng nhập sau ');
-            }
+
             // Lưu vào phiên người dùng
             session()->put('id', $admin->id);
             session()->put('name', $admin->name);
